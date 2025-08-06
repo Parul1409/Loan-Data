@@ -12,7 +12,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url('bank_background.png');
+        background-image: url("https://png.pngtree.com/png-vector/20190227/ourmid/pngtree-vector-bank-icon-png-image_708538.jpg"); /* You can replace this with any direct image link */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -133,3 +133,4 @@ if st.button("🔍 Predict Loan Approval"):
         file_name="loan_prediction_report.pdf",
         mime="application/pdf"
     )
+
