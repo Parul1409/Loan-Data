@@ -6,38 +6,31 @@ import matplotlib.pyplot as plt
 from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import base64
 
-# ------------------ 🔧 Background Image (Base64 Method) ------------------
-def get_base64_image(image_path):
-    with open(image_path, "rb") as img_file:
-        return base64.b64encode(img_file.read()).decode()
-
-bg_image_base64 = get_base64_image("bank_background.png")
-
+# 🎨 Inject custom CSS for background image
 st.markdown(
-    f"""
+    """
     <style>
-    .stApp {{
-        background-image: url("data:image/png;base64,{bg_image_base64}");
+    .stApp {
+        background-image: url('bank_background.png');
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-position: center;
-    }}
+    }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# ------------------ 📦 Load Model & Scaler ------------------
+# Load the trained model and scaler
 model = joblib.load('model.pkl')  
 scaler = joblib.load('scaler.pkl')
 
-# ------------------ 🏦 Title ------------------
+# Title
 st.title("🏦 Loan Prediction App")
 
-# ------------------ 🧾 Sidebar Input ------------------
+# Sidebar inputs
 st.sidebar.header("📝 Applicant Information")
 
 gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
@@ -52,7 +45,7 @@ loan_term = st.sidebar.selectbox("Loan Term (months)", [360, 180, 120, 60])
 credit_history = st.sidebar.selectbox("Credit History", [1.0, 0.0])
 property_area = st.sidebar.selectbox("Property Area", ["Urban", "Rural", "Semiurban"])
 
-# ------------------ 📄 Convert Input to DataFrame ------------------
+# Convert to DataFrame for prediction
 input_data = pd.DataFrame({
     'Gender': [gender],
     'Married': [married],
@@ -67,7 +60,7 @@ input_data = pd.DataFrame({
     'Property_Area': [property_area]
 })
 
-# ------------------ 🔄 Preprocessing ------------------
+# Preprocessing function
 def preprocess(df):
     df = df.copy()
     df['Gender'] = df['Gender'].map({'Male': 1, 'Female': 0})
@@ -80,9 +73,10 @@ def preprocess(df):
 
 input_processed = preprocess(input_data)
 
-# ------------------ 📊 Visualization ------------------
+# Visualize user financial inputs
 st.subheader("📊 Applicant Financial Summary")
 
+# Create bar chart
 fig, ax = plt.subplots()
 bars = ax.bar(
     ['Applicant Income', 'Coapplicant Income', 'Loan Amount'],
@@ -90,6 +84,7 @@ bars = ax.bar(
     color=['skyblue', 'orange', 'green']
 )
 
+# Add value labels
 for bar in bars:
     yval = bar.get_height()
     ax.text(bar.get_x() + bar.get_width()/2.0, yval + 10, f'{yval:.0f}', ha='center', va='bottom')
@@ -99,7 +94,7 @@ ax.set_title("Income & Loan Overview")
 
 st.pyplot(fig)
 
-# ------------------ 🔍 Prediction & PDF ------------------
+# Predict button
 if st.button("🔍 Predict Loan Approval"):
     prediction = model.predict(input_processed)[0]
     result_text = "✅ Loan will be Approved!" if prediction == 'Y' else "❌ Loan will be Rejected."
@@ -109,6 +104,32 @@ if st.button("🔍 Predict Loan Approval"):
     else:
         st.error(result_text)
 
-    # ----- Generate PDF Report -----
+    # ----- PDF generation -----
     buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    c.setFont("Helvetica", 12)
+    c.drawString(50, 750, "Loan Prediction Report")
+    c.line(50, 745, 550, 745)
+    
+    c.drawString(50, 720, f"Prediction Result: {result_text}")
+    c.drawString(50, 700, f"Gender: {gender}")
+    c.drawString(50, 685, f"Married: {married}")
+    c.drawString(50, 670, f"Dependents: {dependents}")
+    c.drawString(50, 655, f"Education: {education}")
+    c.drawString(50, 640, f"Self Employed: {self_employed}")
+    c.drawString(50, 625, f"Applicant Income: {applicant_income}")
+    c.drawString(50, 610, f"Coapplicant Income: {coapplicant_income}")
+    c.drawString(50, 595, f"Loan Amount: {loan_amount}")
+    c.drawString(50, 580, f"Loan Term: {loan_term}")
+    c.drawString(50, 565, f"Credit History: {credit_history}")
+    c.drawString(50, 550, f"Property Area: {property_area}")
+    
+    c.save()
+    buffer.seek(0)
 
+    st.download_button(
+        label="📄 Download Result as PDF",
+        data=buffer,
+        file_name="loan_prediction_report.pdf",
+        mime="application/pdf"
+    )
