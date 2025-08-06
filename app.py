@@ -63,30 +63,3 @@ if st.button("Predict Loan Approval"):
     else:
         st.error("❌ Loan will be Rejected.")
 
-# Load the historical dataset for visualization
-@st.cache_data
-def load_data():
-    return pd.read_csv("loan_data.csv")  # Make sure this file exists
-
-loan_df = load_data()
-
-st.markdown("## 📊 Loan Data Insights")
-
-# 1. Loan Status count
-st.subheader("Loan Approval Distribution")
-status_count = loan_df['Loan_Status'].value_counts()
-st.bar_chart(status_count)
-
-# 2. Loan Amount Distribution
-st.subheader("Loan Amount Distribution")
-st.hist_chart(loan_df['LoanAmount'].dropna())
-
-# 3. Loan Status by Property Area
-st.subheader("Loan Status by Property Area")
-prop_status = loan_df.groupby(['Property_Area', 'Loan_Status']).size().unstack()
-st.bar_chart(prop_status)
-
-# 4. Loan Status by Dependents
-st.subheader("Loan Status by Dependents")
-dep_status = loan_df.groupby(['Dependents', 'Loan_Status']).size().unstack()
-st.bar_chart(dep_status)
