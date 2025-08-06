@@ -12,7 +12,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://static.vecteezy.com/system/resources/previews/021/944/750/non_2x/financial-loan-agency-business-logo-design-on-white-background-illustration-vector.jpg"); /* You can replace this with any direct image link */
+        background-image: url("https://img.freepik.com/premium-vector/loan-logo-design-icon-vector_999827-1718.jpg?w=2000"); /* You can replace this with any direct image link */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -133,6 +133,7 @@ if st.button("🔍 Predict Loan Approval"):
         file_name="loan_prediction_report.pdf",
         mime="application/pdf"
     )
+
 
 
 
