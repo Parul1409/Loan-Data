@@ -5,5 +5,6 @@ scikit-learn
 joblib
 matplotlib
 reportlab
-bank_background.png
+bank_background
+
 
