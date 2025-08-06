@@ -1,17 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import joblib  # or pickle
+import joblib
+import matplotlib.pyplot as plt
 
-# Load the trained model
+# Load the trained model and scaler
 model = joblib.load('model.pkl')  
 scaler = joblib.load('scaler.pkl')
 
 # Title
-st.title("Loan Prediction App")
+st.title("🏦 Loan Prediction App")
 
 # Sidebar inputs
-st.sidebar.header("Applicant Information")
+st.sidebar.header("📝 Applicant Information")
 
 gender = st.sidebar.selectbox("Gender", ["Male", "Female"])
 married = st.sidebar.selectbox("Married", ["Yes", "No"])
@@ -40,9 +41,7 @@ input_data = pd.DataFrame({
     'Property_Area': [property_area]
 })
 
-# Preprocessing should match the training preprocessing
-# You must apply the same label encoding / one-hot encoding etc. here
-# Example:
+# Preprocessing function
 def preprocess(df):
     df = df.copy()
     df['Gender'] = df['Gender'].map({'Male': 1, 'Female': 0})
@@ -55,8 +54,29 @@ def preprocess(df):
 
 input_processed = preprocess(input_data)
 
+# Visualize user financial inputs
+st.subheader("📊 Applicant Financial Summary")
+
+# Create bar chart
+fig, ax = plt.subplots()
+bars = ax.bar(
+    ['Applicant Income', 'Coapplicant Income', 'Loan Amount'],
+    [applicant_income, coapplicant_income, loan_amount],
+    color=['skyblue', 'orange', 'green']
+)
+
+# Add value labels
+for bar in bars:
+    yval = bar.get_height()
+    ax.text(bar.get_x() + bar.get_width()/2.0, yval + 10, f'{yval:.0f}', ha='center', va='bottom')
+
+ax.set_ylabel("Amount")
+ax.set_title("Income & Loan Overview")
+
+st.pyplot(fig)
+
 # Predict button
-if st.button("Predict Loan Approval"):
+if st.button("🔍 Predict Loan Approval"):
     prediction = model.predict(input_processed)[0]
     if prediction == 'Y':
         st.success("✅ Loan will be Approved!")
