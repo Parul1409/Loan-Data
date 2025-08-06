@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 import joblib
 import matplotlib.pyplot as plt
+from io import BytesIO
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 # Load the trained model and scaler
 model = joblib.load('model.pkl')  
@@ -78,8 +81,39 @@ st.pyplot(fig)
 # Predict button
 if st.button("🔍 Predict Loan Approval"):
     prediction = model.predict(input_processed)[0]
+    result_text = "✅ Loan will be Approved!" if prediction == 'Y' else "❌ Loan will be Rejected."
+    
     if prediction == 'Y':
-        st.success("✅ Loan will be Approved!")
+        st.success(result_text)
     else:
-        st.error("❌ Loan will be Rejected.")
+        st.error(result_text)
 
+    # ----- PDF generation -----
+    buffer = BytesIO()
+    c = canvas.Canvas(buffer, pagesize=letter)
+    c.setFont("Helvetica", 12)
+    c.drawString(50, 750, "Loan Prediction Report")
+    c.line(50, 745, 550, 745)
+    
+    c.drawString(50, 720, f"Prediction Result: {result_text}")
+    c.drawString(50, 700, f"Gender: {gender}")
+    c.drawString(50, 685, f"Married: {married}")
+    c.drawString(50, 670, f"Dependents: {dependents}")
+    c.drawString(50, 655, f"Education: {education}")
+    c.drawString(50, 640, f"Self Employed: {self_employed}")
+    c.drawString(50, 625, f"Applicant Income: {applicant_income}")
+    c.drawString(50, 610, f"Coapplicant Income: {coapplicant_income}")
+    c.drawString(50, 595, f"Loan Amount: {loan_amount}")
+    c.drawString(50, 580, f"Loan Term: {loan_term}")
+    c.drawString(50, 565, f"Credit History: {credit_history}")
+    c.drawString(50, 550, f"Property Area: {property_area}")
+    
+    c.save()
+    buffer.seek(0)
+
+    st.download_button(
+        label="📄 Download Result as PDF",
+        data=buffer,
+        file_name="loan_prediction_report.pdf",
+        mime="application/pdf"
+    )
