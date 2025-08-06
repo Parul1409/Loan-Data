@@ -5,6 +5,7 @@ scikit-learn
 joblib
 matplotlib
 reportlab
-bank_background
+
+
 
 
