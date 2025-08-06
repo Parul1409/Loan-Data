@@ -7,6 +7,22 @@ from io import BytesIO
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 
+# 🎨 Inject custom CSS for background image
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-image: url('bank_background.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Load the trained model and scaler
 model = joblib.load('model.pkl')  
 scaler = joblib.load('scaler.pkl')
@@ -117,3 +133,4 @@ if st.button("🔍 Predict Loan Approval"):
         file_name="loan_prediction_report.pdf",
         mime="application/pdf"
     )
+
