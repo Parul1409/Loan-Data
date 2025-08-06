@@ -12,7 +12,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://th.bing.com/th/id/OIP.8eMf4sBJIqHc7eJ2QcxLsAHaEK?w=322&h=180&c=7&r=0&o=7&pid=1.7&rm=3"); /* You can replace this with any direct image link */
+        background-image: url("https://th.bing.com/th/id/OIP.MKWEBNxP3Ap1LYJr7Vk8FwHaEK?w=267&h=180&c=7&r=0&o=7&pid=1.7&rm=3"); /* You can replace this with any direct image link */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -133,6 +133,7 @@ if st.button("🔍 Predict Loan Approval"):
         file_name="loan_prediction_report.pdf",
         mime="application/pdf"
     )
+
 
 
 
