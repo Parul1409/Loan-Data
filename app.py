@@ -12,7 +12,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("https://www.bing.com/images/search?view=detailV2&ccid=6AkKp8EA&id=D50BD939035550ED93F3361BCF2EFCDBBAF6A73A&thid=OIP.6AkKp8EAK5hqgjRnr3YPYwHaHa&mediaurl=https%3a%2f%2fthumbs.dreamstime.com%2fb%2fbank-linear-icon-modern-outline-logo-concept-white-back-background-cryptocurrency-economy-finance-collection-suitable-133517409.jpg&exph=800&expw=800&q=bank+logo+for+background+light+tone&simid=608029269945815043&FORM=IRPRST&ck=6976C65C4BEBA0E5F529D060A60012FD&selectedIndex=26&itb=0"); /* You can replace this with any direct image link */
+        background-image: url("https://th.bing.com/th/id/OIP.8eMf4sBJIqHc7eJ2QcxLsAHaEK?w=322&h=180&c=7&r=0&o=7&pid=1.7&rm=3"); /* You can replace this with any direct image link */
         background-size: cover;
         background-repeat: no-repeat;
         background-attachment: fixed;
@@ -133,5 +133,6 @@ if st.button("🔍 Predict Loan Approval"):
         file_name="loan_prediction_report.pdf",
         mime="application/pdf"
     )
+
 
 
